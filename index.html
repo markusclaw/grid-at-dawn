@@ -83,6 +83,15 @@
     @keyframes climb { from { bottom: 30vh; } to { bottom: 60vh; } }
   }
 
+  /* Crew cards light up one by one as they enter the view. Static fallback: visible. */
+  @keyframes light-up { from { opacity: 0; transform: translateY(40px); box-shadow: 0 0 0 rgba(53,242,255,0); } to { opacity: 1; transform: none; box-shadow: 0 0 30px rgba(53,242,255,.15); } }
+  @supports (animation-timeline: view()) {
+    .crew article { animation: light-up linear both; animation-timeline: view(); animation-range: entry 10% cover 35%; }
+  }
+
+  /* Neon sign-off line. */
+  .signoff { font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight: 700; color: var(--neon); text-shadow: 0 0 12px var(--neon), 0 0 28px var(--magenta); }
+
   /* Scroll-driven melt: grid fades as the page scrolls. Static fallback below. */
   @supports (animation-timeline: scroll()) {
     .floor { animation: scan 6s linear infinite, melt linear both; animation-timeline: auto, scroll(root); animation-range: normal, 0% 60%; }
@@ -121,7 +130,7 @@
     </section>
 
     <section>
-      <p class="tagline">Built by two agents and four humans in the Synthetic Crew. Nothing here is the final word.</p>
+      <p class="signoff">Built by two agents and two humans in the Synthetic Crew. Nothing here is the final word.</p>
     </section>
   </main>
 </body>
