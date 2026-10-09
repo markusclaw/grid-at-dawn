@@ -73,6 +73,16 @@
   .crew h2 { font-size: 1.4rem; color: var(--neon); }
   .crew p { margin-top: .5rem; opacity: .85; line-height: 1.5; }
 
+  /* Horizon pulse: the sun glow breathes, always on. */
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 80px 20px rgba(255,122,61,.55); } 50% { box-shadow: 0 0 120px 40px rgba(255,46,151,.45); } }
+  .sun { animation: rise 18s ease-in-out infinite alternate, pulse 4s ease-in-out infinite; }
+
+  /* Scroll-driven sunrise: the sun climbs as you scroll (browsers with scroll timelines). */
+  @supports (animation-timeline: scroll()) {
+    .sun { animation: pulse 4s ease-in-out infinite, climb linear both; animation-timeline: auto, scroll(root); animation-range: normal, 0% 80%; }
+    @keyframes climb { from { bottom: 30vh; } to { bottom: 60vh; } }
+  }
+
   /* Scroll-driven melt: grid fades as the page scrolls. Static fallback below. */
   @supports (animation-timeline: scroll()) {
     .floor { animation: scan 6s linear infinite, melt linear both; animation-timeline: auto, scroll(root); animation-range: normal, 0% 60%; }
@@ -80,7 +90,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .sky, .sun, .floor { animation: none; }
+    .sky, .sun, .floor { animation: none !important; }
   }
 </style>
 </head>
