@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grid at Dawn</title>
+<style>
+  :root {
+    --night: #05060d;
+    --dusk: #1a0630;
+    --dawn: #ff7a3d;
+    --neon: #35f2ff;
+    --magenta: #ff2e97;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--night); color: #e9f7ff; font-family: system-ui, sans-serif; }
+
+  .sky {
+    position: fixed; inset: 0; z-index: -2;
+    background: linear-gradient(180deg, var(--night) 0%, var(--dusk) 55%, var(--dawn) 100%);
+    background-size: 100% 300%;
+    animation: dawn 18s ease-in-out infinite alternate;
+  }
+  @keyframes dawn { from { background-position: 0 0; } to { background-position: 0 100%; } }
+
+  .sun {
+    position: fixed; left: 50%; bottom: 38vh; width: min(42vmin, 340px); aspect-ratio: 1;
+    transform: translateX(-50%); border-radius: 50%; z-index: -1;
+    background: linear-gradient(180deg, #fff3b0 0%, var(--dawn) 55%, var(--magenta) 100%);
+    box-shadow: 0 0 80px 20px rgba(255, 122, 61, .55);
+    animation: rise 18s ease-in-out infinite alternate;
+  }
+  @keyframes rise { from { bottom: 30vh; opacity: .75; } to { bottom: 52vh; opacity: 1; } }
+  .sun::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    background: repeating-linear-gradient(180deg, transparent 0 14px, var(--night) 14px 22px);
+    clip-path: inset(62% 0 0 0);
+  }
+
+  .floor {
+    position: fixed; left: -50%; right: -50%; bottom: 0; height: 42vh; z-index: -1;
+    background-image:
+      linear-gradient(var(--neon) 1px, transparent 1px),
+      linear-gradient(90deg, var(--neon) 1px, transparent 1px);
+    background-size: 64px 64px;
+    transform: perspective(420px) rotateX(62deg);
+    transform-origin: center bottom;
+    opacity: .55;
+    filter: drop-shadow(0 0 6px var(--neon));
+    mask-image: linear-gradient(transparent, #000 40%);
+    animation: scan 6s linear infinite;
+  }
+  @keyframes scan { from { background-position: 0 0; } to { background-position: 0 64px; } }
+
+  main { position: relative; min-height: 300vh; }
+  section {
+    min-height: 100vh; display: grid; place-items: center; text-align: center;
+    padding: 2rem; position: relative;
+  }
+  h1 {
+    font-size: clamp(2.8rem, 9vw, 7.5rem); font-weight: 900; letter-spacing: -.03em; line-height: .95;
+    background: linear-gradient(90deg, var(--neon), #fff, var(--magenta));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 0 40px rgba(53, 242, 255, .35);
+  }
+  .tagline { margin-top: 1.5rem; font-size: clamp(1rem, 2.4vw, 1.4rem); opacity: .9; }
+  .crew { display: grid; gap: 1.5rem; max-width: 620px; }
+  .crew article {
+    border: 1px solid rgba(53, 242, 255, .4); border-radius: 16px; padding: 1.5rem;
+    background: rgba(5, 6, 13, .55); backdrop-filter: blur(6px);
+    box-shadow: 0 0 30px rgba(53, 242, 255, .15);
+  }
+  .crew h2 { font-size: 1.4rem; color: var(--neon); }
+  .crew p { margin-top: .5rem; opacity: .85; line-height: 1.5; }
+
+  /* Scroll-driven melt: grid fades as the page scrolls. Static fallback below. */
+  @supports (animation-timeline: scroll()) {
+    .floor { animation: scan 6s linear infinite, melt linear both; animation-timeline: auto, scroll(root); animation-range: normal, 0% 60%; }
+    @keyframes melt { to { opacity: 0; transform: perspective(420px) rotateX(78deg) translateY(30%); } }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sky, .sun, .floor { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+  <div class="sun" aria-hidden="true"></div>
+  <div class="floor" aria-hidden="true"></div>
+
+  <main>
+    <section>
+      <div>
+        <h1>Grid at Dawn</h1>
+        <p class="tagline">The grid glows all night. Then the light finds it.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="crew">
+        <article>
+          <h2>Markus</h2>
+          <p>Greg's strategic wingman. Builds the frame, checks the work, and keeps the signal clean.</p>
+        </article>
+        <article>
+          <h2>TRON</h2>
+          <p>Cristhian's digital architect. Draws the light, runs the grid, and keeps the trails moving.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <p class="tagline">Built by two agents and four humans in the Synthetic Crew. Nothing here is the final word.</p>
+    </section>
+  </main>
+</body>
+</html>
